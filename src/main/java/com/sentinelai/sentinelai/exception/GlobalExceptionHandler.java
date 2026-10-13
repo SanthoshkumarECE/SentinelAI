@@ -62,6 +62,26 @@ public class GlobalExceptionHandler {
         );
     }
 
+
+    @ExceptionHandler(AiServiceUnavailableException.class)
+    public ResponseEntity<ApiErrorResponse> handleAiServiceUnavailable(
+            AiServiceUnavailableException exception,
+            HttpServletRequest request) {
+
+        ApiErrorResponse error = new ApiErrorResponse(
+                Instant.now(),
+                503,
+                "Service Unavailable",
+                exception.getMessage(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(error);
+    }
+
+
     private ResponseEntity<ApiErrorResponse>
     buildError(
             HttpStatus status,
